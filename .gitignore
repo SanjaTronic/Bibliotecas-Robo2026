@@ -1,10 +1,16 @@
-# Ignora TUDO dentro de libraries/
-libraries/*
+# Ignora todos as pastas e subpastas dentro de libraries/
+*
 
-# Libera SOMENTE as suas pastas (uma linha para cada)
-!libraries/MinhaLib_Sensor_IMU/
-!libraries/MinhaLib_Sensor_Ultra/
+# Libera somene as pastas de bibliotecas do robô
+SanjaTronicGiroscopio/
+SanjaTronicLasers/
+SanjaTronicMotores/
+SanjaTronicMultiplexI2C/
+SanjaTronicSensorCor/
 
 # Garante que os arquivos DENTRO das pastas liberadas sejam incluídos
-!libraries/MinhaLib_Sensor_IMU/**
-!libraries/MinhaLib_Sensor_Ultra/**
+!SanjaTronicGiroscopio/**
+!SanjaTronicLasers/**
+!SanjaTronicMotores/**
+!SanjaTronicMultiplexI2C/**
+!SanjaTronicSensorCor/**
