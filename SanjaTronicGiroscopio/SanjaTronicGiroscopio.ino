@@ -1,3 +1,8 @@
+/*
+virar à direita diminui o angulo
+virar à esquerda aumenta o angulo
+*/
+
 #include "SanjaTronicMultiplexI2C.h"
 #include "SanjaTronicGiroscopio.h"
 

@@ -1,107 +1,65 @@
 #include <Wire.h>
+
 #include "Adafruit_VL53L0X.h"
+#include "SanjaTronicMultiplexI2C.h"
 #include "SanjaTronicLasers.h"
 
 SanjaTronicMultiplexI2C multiplex(0x70);
 SanjaTronicLasers lasers(&multiplex);
 
-#define laserDir 2
-#define laserEsq 3
-#define laserfrt 4
-
 void setup()
 {
   Serial.begin(9600);
 
-  lasers.iniciaLaser(2); // OK
-  lasers.iniciaLaser(3); // OK
-  lasers.iniciaLaser(4); // OK
-  lasers.iniciaLaser(5); //OK (laser frente)
-  //lasers.iniciaLaser(6); // NAO OK
-  //lasers.iniciaLaser(7); // NAO OK
-
-}
-void loop()
-{
-  float d = lasers.getDistancia(5);
-  Serial.println(d);
-  delay(10);
-
-}
-/*
-#define TCA_ADDR 0x70
-
-Adafruit_VL53L0X sensor0 = Adafruit_VL53L0X();
-Adafruit_VL53L0X sensor1 = Adafruit_VL53L0X();
-Adafruit_VL53L0X sensor2 = Adafruit_VL53L0X();
-Adafruit_VL53L0X sensor3 = Adafruit_VL53L0X();
-Adafruit_VL53L0X sensor4 = Adafruit_VL53L0X();
-Adafruit_VL53L0X sensor5 = Adafruit_VL53L0X();
-
-// Array das instancias dos sensores lasers
-Adafruit_VL53L0X* sensores[6] = {
-  &sensor0, &sensor1, &sensor2,
-  &sensor3, &sensor4, &sensor5
-};
-
-void setup() {
-  Serial.begin(9600);
   Wire.begin();
 
-  iniciaLaser(2); // Inicia o sensor laser no canal 0 do multiplexador
-  iniciaLaser(3);
-
-  /*for(int i = 0; i < 6; i++)
-  {
-    iniciaLaser(i);
-  }
+  // agora os índices vão de 0 até 5
+  lasers.iniciaLaser(0); // canal 2 (lateral esquerda trás)
+  lasers.iniciaLaser(1); // canal 3 (lateral esquerda frente)
+  lasers.iniciaLaser(2); // canal 4 (sensor frontal lado esquerdo)
+  lasers.iniciaLaser(3); // canal 5 (sensor frontal lado direito)
+  lasers.iniciaLaser(4); // canal 6 (lateral direita frente)
+  lasers.iniciaLaser(5); // canal 7 (lateral direita trás)
 }
 
-void loop() {
-  //VL53L0X_RangingMeasurementData_t measure;
-
-  /*leituraLaser(0);
-  leituraLaser(1);
-  leituraLaser(2);
-  leituraLaser(3);
-  /*leituraLaser(4);
-  leituraLaser(5);
-
-  delay(1000);
-}
-
-// Funcoes auxiliares
-void iniciaLaser(int numSensor)
+void loop()
 {
-  tcaSelect(numSensor);
-  
-  Serial.print("Lendo ");
-  Serial.println(numSensor);
-
-  if(!sensores[numSensor]->begin())
-  {
-    Serial.print("Erro no sensor ");
-    Serial.println(numSensor);
-    while (1);
-  }
+  testarDireita();
 }
-float leituraLaser(int numSensor)
+
+// Funções auxiliares
+void testarFrente()
 {
-  VL53L0X_RangingMeasurementData_t measure;
+  float frenteA = lasers.getDistancia(2);
+  float frenteB = lasers.getDistancia(3);
 
-  tcaSelect(numSensor);
-  sensores[numSensor]->rangingTest(&measure, false);
-  Serial.print("Laser ");
-  Serial.print(numSensor);
-  Serial.print(": ");
-  Serial.print(measure.RangeMilliMeter / 10);
-  Serial.println(" cm ");
+  Serial.print("frenteA: ");
+  Serial.println(frenteA);
 
-  return measure.RangeMilliMeter / 10;
+  Serial.print("frenteB: ");
+  Serial.println(frenteB);
 }
+void testarEsquerda()
+{
+  float esquerdoA = lasers.getDistancia(0);
+  float esquerdoB = lasers.getDistancia(1);
 
-void tcaSelect(uint8_t i) {
-  Wire.beginTransmission(TCA_ADDR);
-  Wire.write(1 << i);
-  Wire.endTransmission();
-}*/
+  Serial.print("esquerdoA: ");
+  Serial.println(esquerdoA);
+
+  Serial.print("esquerdoB: ");
+  Serial.println(esquerdoB);
+
+  delay(100);
+}
+void testarDireita()
+{
+  float direitaA = lasers.getDistancia(5);
+  float direitaB = lasers.getDistancia(4);
+
+  Serial.print("direitaA: ");
+  Serial.println(direitaA);
+
+  Serial.print("direitaB: ");
+  Serial.println(direitaB);
+}

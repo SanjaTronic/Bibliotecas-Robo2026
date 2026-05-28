@@ -1,5 +1,4 @@
 #include "SanjaTronicLasers.h"
-#include <Adafruit_VL53L0X.h>
 
 SanjaTronicLasers::SanjaTronicLasers(SanjaTronicMultiplexI2C* mux)
 {
@@ -12,26 +11,49 @@ SanjaTronicLasers::SanjaTronicLasers(SanjaTronicMultiplexI2C* mux)
   sensores[4] = &sensor4;
   sensores[5] = &sensor5;
 }
-void SanjaTronicLasers::iniciaLaser(int numSensor)
+
+void SanjaTronicLasers::iniciaLaser(int indiceSensor)
 {
-  multiplex->selecionarCanal(numSensor);
-
-  Serial.print("Iniciando laser : ");
-  Serial.println(numSensor);
-
-  if(!sensores[numSensor]->begin())
+  // proteção contra índice inválido
+  if(indiceSensor < 0 || indiceSensor > 5)
   {
-    Serial.print("falha na inicializacao no sensor: ");
-    Serial.print(numSensor);
-    while (1);
+    Serial.println("Indice de sensor invalido");
+    return;
   }
+
+  // seleciona o canal REAL do TCA
+  multiplex->selecionarCanal(canais[indiceSensor]);
+
+  Serial.print("Iniciando laser indice: ");
+  Serial.print(indiceSensor);
+
+  Serial.print(" no canal: ");
+  Serial.println(canais[indiceSensor]);
+
+  if(!sensores[indiceSensor]->begin())
+  {
+    Serial.print("Falha no sensor: ");
+    Serial.println(indiceSensor);
+
+    while(1);
+  }
+
+  Serial.println("Sensor iniciado com sucesso");
 }
-float SanjaTronicLasers::getDistancia(int numSensor)
+
+float SanjaTronicLasers::getDistancia(int indiceSensor)
 {
+  if(indiceSensor < 0 || indiceSensor > 5)
+  {
+    Serial.println("Indice de sensor invalido");
+    return -1;
+  }
+
   VL53L0X_RangingMeasurementData_t measure;
 
-  multiplex->selecionarCanal(numSensor);
-  sensores[numSensor]->rangingTest(&measure, false);
+  multiplex->selecionarCanal(canais[indiceSensor]);
+
+  sensores[indiceSensor]->rangingTest(&measure, false);
 
   return measure.RangeMilliMeter / 10.0;
 }

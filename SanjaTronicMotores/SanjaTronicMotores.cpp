@@ -46,12 +46,12 @@ void SanjaTronicMotores::moverTras()
 
 void SanjaTronicMotores::virarEsquerda()
 {
-  configurarMotores(velocidadeCurvaEsq, velocidadeCurvaDir, 1, 0, 0, 1);
+  configurarMotores(velocidadeCurvaEsq, velocidadeCurvaDir, 0, 1, 1, 0); // 0, 1, 1, 0
 }
 
 void SanjaTronicMotores::virarDireita()
 {
-  configurarMotores(velocidadeCurvaEsq, velocidadeCurvaDir, 0, 1, 1, 0);
+  configurarMotores(velocidadeCurvaEsq, velocidadeCurvaDir, 1, 0, 0, 1); // 1, 0, 0, 1
 }
 
 void SanjaTronicMotores::parar()
