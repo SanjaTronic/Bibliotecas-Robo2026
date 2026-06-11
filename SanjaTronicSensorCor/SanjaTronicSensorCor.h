@@ -3,18 +3,24 @@
 
 #include <Arduino.h>
 
+enum CorDetectada
+{
+    NENHUMA,
+    BRANCO,
+    PRETO,
+    AZUL
+};
+
 class SanjaTronicSensorCor
 {
   private:
     int PinOUT, PinS2, PinS3;
-    int red;
-    int green;
-    int blue;
+    int red, green, blue;
 
   public:
     void definirPinos(int PinOUT, int PinS2, int PinS3);
-    void cores();
-    void leituraCores();
+
+    CorDetectada leituraCores();
 };
 
 #endif

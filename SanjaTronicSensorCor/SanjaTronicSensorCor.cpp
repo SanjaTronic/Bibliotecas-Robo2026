@@ -11,64 +11,38 @@ void SanjaTronicSensorCor::definirPinos(int PinOUT, int PinS2, int PinS3)
   pinMode(PinS3, OUTPUT);
 }
 
-void SanjaTronicSensorCor::leituraCores()
+CorDetectada SanjaTronicSensorCor::leituraCores()
 {
   digitalWrite(PinS2, LOW);
   digitalWrite(PinS3, LOW);
-  red = pulseIn(PinOUT, LOW);
-
-  Serial.print(" R: ");
-  Serial.print(red);
-
-  delay(15);
+  red = pulseIn(PinOUT, LOW, 30000);
 
   digitalWrite(PinS2, HIGH);
   digitalWrite(PinS3, HIGH);
-  green = pulseIn(PinOUT, LOW);
-
-  Serial.print(" G: ");
-  Serial.print(green);
-
-  delay(15);
+  green = pulseIn(PinOUT, LOW, 30000);
 
   digitalWrite(PinS2, LOW);
   digitalWrite(PinS3, HIGH);
-  blue = pulseIn(PinOUT, LOW);
+  blue = pulseIn(PinOUT, LOW, 30000);
 
-  Serial.print(" B: ");
-  Serial.print(blue);
-
-  delay(15);
-
-  cores();
-
-  delay(1000);
-}
-
-void SanjaTronicSensorCor::cores()
-{
-  if (blue < 20 && red < 20 && green < 20) { //detecção da cor branca
-    Serial.println("Branco");
-  }
-  else if ((red > 32 && red < 70) && (green > 31 && green < 60) && (blue > 22 && blue < 38)) { // detecção da cor preta
-    Serial.println("PRETO");
-    /*
-    pararMotores();
-    paraTras();
-    delay(3000);
-    */
+  if (blue < 20 && red < 20 && green < 20)
+  {
+    return BRANCO;
   }
 
-  else if((red > 27 && red < 42) && (green > 20 && green < 35) && (blue > 12 && blue < 20)) { // detecção da cor azul
-    Serial.println("AZUL");
-    /*
-    pararMotores();                    
-    delay(5000);
-    */
+  else if ((red > 26 && red < 70) &&
+      (green > 35 && green < 60) &&
+      (blue > 22 && blue < 38))
+  {
+    return PRETO;
   }
 
-  else if (red < blue && red < green && red < 100) { //detecção da cor vermelha
-    Serial.println("Vermelho");
-    // Lógica da zona de perigo
+  else if ((red > 12 && red < 26) &&
+      (green > 24 && green < 35) &&
+      (blue > 12 && blue < 17))
+  {
+    return AZUL;
   }
+
+  return NENHUMA;
 }
