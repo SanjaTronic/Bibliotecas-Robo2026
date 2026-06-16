@@ -32,7 +32,7 @@ CorDetectada SanjaTronicSensorCor::leituraCores()
 
   else if ((red > 26 && red < 70) &&
       (green > 35 && green < 60) &&
-      (blue > 22 && blue < 38))
+      (blue > 22 && blue < 42))
   {
     return PRETO;
   }
