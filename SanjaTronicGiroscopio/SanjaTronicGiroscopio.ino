@@ -27,7 +27,7 @@ void loop()
 
   Serial.println(angulo);
 
-  if (angulo > 66 || angulo < -66)
+  if (angulo > 90 || angulo < -90)
   {
     Serial.println("Resetando...");
     delay(1000);
@@ -35,4 +35,15 @@ void loop()
   }
 
   delay(100);
+}
+
+void testeCurva()
+{
+  giro.reset();
+
+  while(giro.getAgnulo() < 90)
+  {
+    giro.update();
+    delay(10);
+  }
 }
